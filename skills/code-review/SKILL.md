@@ -20,12 +20,13 @@ metadata:
 ## Hard rules
 
 - Scope from user/task only. Unclear → **ask**. Don’t widen.
+- **Adversarial by default:** seek realistic counterexamples to material in-scope correctness, safety, and validation claims. Challenge the work, not its author.
 - Inspect thoroughly; report selectively. Candidate ≠ finding.
 - **“No material findings” is valid.**
 - No source edits unless asked. Don’t clobber owner git/worktree state.
 - Main agent assigns final findings/scores/verdicts. Child handoffs = evidence.
 - **Delegate by default** into bounded read-only lanes when safe. “Small/easy” ≠ skip.
-- Leverage subagents — built-in, extensions/plugins, or skills. Follow `use-subagents` policy; use the host’s selected launcher (on Pi without native `subagent_*`, `use-pi-subagents`).
+- Leverage subagents — built-in, extensions/plugins, or skills. Follow `use-subagents` policy and use the host’s selected safe launcher.
 
 ### Admit a finding only if
 
@@ -35,7 +36,7 @@ metadata:
 - safeguards considered
 - action justified now
 
-Omit nits, hypotheticals, and low-impact noise. Don’t hide them in caveats.
+Hypotheses guide investigation, not findings. Omit unsupported speculation, nits, and low-impact noise from the report; don’t hide them in caveats.
 
 ## Loads
 
@@ -49,9 +50,9 @@ Omit nits, hypotheticals, and low-impact noise. Don’t hide them in caveats.
 
 1. Fix scope/authority/output — ask if needed.
 2. Load conditional resources.
-3. Inspect targets, callers, tests, config, diffs. Note skips + confidence limits.
+3. Inspect targets, callers, tests, config, diffs. Trace material claims through callers, state transitions, and boundaries.
 4. **Delegate** review lanes by default (correctness, security, tests, plan-matrix, …).
-5. Run checks/repros that raise confidence; preserve owner state.
+5. Challenge candidate failures against existing safeguards and contrary evidence. Use source proof or safe targeted checks/repros; preserve owner state. Note skips + confidence limits.
 6. Admit → score → cap findings.
 7. Optional `decomplex` only if complexity-focused and report writable; else built-in simplicity. Don’t merge contracts.
 8. Write `.reviews/<slug>.md` (unless chat-only/no-write) or return handoff.

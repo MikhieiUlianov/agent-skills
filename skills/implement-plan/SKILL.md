@@ -46,7 +46,8 @@ For each dependency-ready task/subtask (delegate by default):
 1. **Analyze** — read starts-at paths, callers, tests; research only if needed (`web-research` when third-party/current behavior is uncertain).
 2. **Implement** — smallest change that satisfies the row; stay in ownership; record deviations.
 3. **Check** — targeted tests + applicable lint/typecheck/build/migration/browser (`agent-browser` for UI).
-4. **Review** — independent `code-review` when the task crosses a real boundary, or when the batch/phase completes; always for final full-plan review.
+4. **Review** — independent adversarial `code-review` when the task crosses a real boundary, or when the batch/phase completes; always for final full-plan review.
+   - Challenge material completion claims against actual implementation and validation evidence—not merely tracker status or passing checks.
 5. **Disposition** findings:
    - `Fix now` · `Validate` · `Reject` · `Ask user` · `Block`
    - Fix accepted items (delegate); rerun checks; focused re-review until `Clear`

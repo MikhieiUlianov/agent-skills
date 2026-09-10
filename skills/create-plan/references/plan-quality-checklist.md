@@ -25,7 +25,7 @@ Complete before final delivery and after material revisions. Evidence requiredâ€
 ## Complexity, review, delivery
 
 - [ ] Structural choices got `decomplex` Prevention or built-in gate + recorded fallback
-- [ ] Consequential draft got independent review (or parent checklist + independence limit)
+- [ ] Consequential draft got independent review (or parent checklist + independence limit); review evidence shows material assumptions and false-green acceptance were challenged, not just checklist completion
 - [ ] Every finding/rec dispositioned (`Accept`/`Validate`/`Reject`/`Ask user`/`Block`); nothing auto-applied
 - [ ] Complexity-increasing accepts got triage or built-in gate; doubt escalated to user
 - [ ] Focused re-review until all commissioned reviewers `Clear` (or user escalation after stall)

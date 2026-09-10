@@ -55,7 +55,10 @@ metadata:
 5. **Synthesize** — smallest approach; map findings → decisions/tasks/checks/non-goals/gates; drop fluff.
 6. **Draft** — adapt template; flat tasks default; phases only for real boundaries; no review ledgers in the handoff.
 7. **Complexity** — structural draft → `decomplex` Prevention if available, else built-in gate. Complexity-increasing accept → triage; doubt → ask user.
-8. **Review** — consequential plans: delegate fresh independent reviewers → disposition (`Accept`/`Validate`/`Reject`/`Ask user`/`Block`) → revise → re-review until `Clear`. Small/unavailable: parent checklist + independence limit.
+8. **Review** — consequential plans: delegate fresh independent reviewers for adversarial review → disposition (`Accept`/`Validate`/`Reject`/`Ask user`/`Block`) → revise → re-review until `Clear`. Small/unavailable: parent checklist + independence limit.
+   - In independent or parent review, challenge material assumptions, feasibility, and sequencing with realistic counterexamples.
+   - Ask: if implemented exactly and all named checks passed, could the required outcome still fail?
+   - Ground concerns in inspected evidence and realistic consequences; consider safeguards and contrary evidence. Recommend the smallest in-scope correction. `Clear` with no material findings is valid.
 9. **Checklist → deliver** — save under `.plans/` (or chat + no-write reason). Report path, gates, decisions, fallbacks, risks.
 
 ## Stop
