@@ -125,7 +125,7 @@ Prefer `Unassigned`, `TBD`, or `Unknown` over guessed owners, dates, or certaint
 - Background-first history before the answer.
 - Filling every module or forcing all three archetypes.
 - Invented owners, dates, confidence, or citations.
-- Adopting `code-review`, `create-plan`, `decomplex`, `implement-plan`, or `create-changes-report` authority.
+- Adopting code-review, planning, complexity-audit, implementation, or repository-change-handoff authority.
 - Decorative charts, theme packs, or live dashboard behavior.
 - JavaScript-only navigation or evidence that disappears in print.
 - Repeating the same number in tile, prose, table, and chart.

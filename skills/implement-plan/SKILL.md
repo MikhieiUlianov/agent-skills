@@ -15,83 +15,38 @@ metadata:
 
 # Implement Plan
 
-## Hard rules
+## Rules
 
-- Stay on the plan’s required outcome. Discovery/review do **not** add scope.
-- Prefer the smallest behavior-preserving change. Skip unnecessary abstractions/tests/safeguards.
-- **Delegate by default** when safe. “Small/easy” is not a reason to skip subagents.
-- Leverage subagents — built-in, extensions/plugins, or skills. Follow `use-subagents` policy; use native subagents, extensions / plugins, or other skills
-- Main agent owns: tracker, integration, dispositions, acceptance, user comms, cleanup.
-- Child handoffs = evidence, never acceptance. Inspect diffs; rerun checks.
-- Findings / `decomplex` recs never auto-create work — disposition first.
-- Material doubt, scope/risk choices, or stuck review loops → **ask user**.
-- Never fake `Complete`.
+- Stay within the plan's required outcome; research/review does not add scope. Prefer the smallest sufficient change.
+- Delegate when safe under `use-subagents`; small size alone does not justify skipping. Parent owns the work document, ADR status, integration, dispositions, acceptance, and cleanup.
+- Child claims and review findings are evidence, never automatic acceptance or new work. Inspect diffs and rerun relevant checks.
+- Material unresolved scope/risk choices or stalled review (two failed rounds, recurrence, or no progress) → ask user. Honor existing authorization.
 
-## Startup (blocking)
+## Startup and resume
 
-1. Read the **full** plan (offset if truncated).
-2. **Read** [`assets/progress-tracker-template.md`](assets/progress-tracker-template.md) with the file tool (memory doesn’t count).
-3. Leverage subagents — built-in, extensions/plugins, or via skills.
-4. Copy/adapt tracker into the plan or a standalone file.
-5. Map every actionable plan requirement → tracker rows (split compound work into tasks/subtasks).
-6. Record `Template loaded from: implement-plan/assets/progress-tracker-template.md`.
-7. Only then implement.
-
-On resume: repeat startup and reconcile. Missing template → stop.
+1. Read [ADR conventions](../create-plan/references/adr-conventions.md), the full plan/work document, and relevant accepted ADRs. Resolve material conflicts before dependent implementation.
+2. Read [implementation updates](assets/implementation-updates.md). Apply missing fields to the existing work document; preserve task IDs, requirements, and evidence. Reconcile current state instead of creating another tracker.
+3. Map every actionable requirement to a task/subtask with acceptance checks. An ADR alone is not an executable plan: use `create-plan` when a plan is missing.
+4. Only then implement. Missing required resources → stop.
 
 ## Task loop
 
-For each dependency-ready task/subtask (delegate by default):
+For each dependency-ready task, delegate by default:
 
-1. **Analyze** — read starts-at paths, callers, tests; research only if needed (`web-research` when third-party/current behavior is uncertain).
-2. **Implement** — smallest change that satisfies the row; stay in ownership; record deviations.
-3. **Check** — targeted tests + applicable lint/typecheck/build/migration/browser (`agent-browser` for UI).
-4. **Review** — independent adversarial `code-review` when the task crosses a real boundary, or when the batch/phase completes; always for final full-plan review.
-   - Challenge material completion claims against actual implementation and validation evidence—not merely tracker status or passing checks.
-5. **Disposition** findings:
-   - `Fix now` · `Validate` · `Reject` · `Ask user` · `Block`
-   - Fix accepted items (delegate); rerun checks; focused re-review until `Clear`
-   - Complexity-increasing fix → `decomplex` triage if available, else built-in gate; doubt → ask user
-   - Two failed rounds / recurrence / no progress → ask user
-6. **Update tracker** — `Verified` needs evidence; `Descoped` needs user approval.
-7. **Cleanup** lane resources per `use-subagents` (and launcher runtime cleanup, e.g. Pi `clean`, if used) — no unaccounted workflow-owned resources.
-8. Next ready task/subtask.
+1. **Analyze** starts-at files, callers, and tests. Use `web-research` for uncertain external behavior; keep findings in the same work document.
+2. **Implement** the smallest sufficient change within ownership. Record deviations; material decision changes follow the ADR lifecycle.
+3. **Check** targeted tests and applicable lint/typecheck/build/migration/browser checks (`agent-browser` for UI).
+4. **Review** with independent adversarial `code-review` at plan checkpoints and real boundaries: integration, migration, public contracts, security/data invariants, risky dependencies, or completed batches. Always review the final full plan.
+5. **Disposition** each finding: `Fix now` / `Validate` / `Reject` / `Ask user` / `Block`. Fix accepted items, rerun checks, and re-review affected scope until `Clear`. Complexity-increasing fixes → `decomplex` triage or a disclosed built-in gate; material doubt → ask user.
+6. **Update** task status/evidence and next action in place. `Verified` needs evidence; `Descoped` needs user authorization. Link separate review reports and concise closure.
+7. **Clean up** lane resources under `use-subagents`, then continue.
 
-Parallelize only independent tasks with isolated writers. Parent is sole tracker writer under concurrency.
+Parallelize independent tasks with isolated writers. Parent alone updates shared work and ADR status. Use fresh reviewers without sharing prior conclusions; one reviewer by default. If independent review is unavailable, disclose the parent-review limit.
 
-## When to review
+## Finish
 
-- After major boundaries: integration, migration, public contract, security/data invariant, risky dep, delivery milestone
-- Plan-authored checkpoints
-- Final full-plan review (plan-backed)
-
-Fresh reviewers; don’t share conclusions pre-handoff. One reviewer default. Parent review only if independent review is unavailable — record the limit.
-
-Reviewer states: `Clear` · `Changes required` · `Human decision required` · `Blocked`
-
-## Done
-
-1. Reread full plan — no missed requirements.
-2. No row `Pending` / `In progress` / `Blocked`.
-3. Diff hygiene — drop unjustified scope/complexity.
-4. Final checks + final plan-backed implementation review (+ `decomplex` Audit of **this** diff if proportionate).
-5. When repository files changed, use `create-changes-report` after those checks to generate/QA a candidate (creator-QA-complete exact bytes). Material issue in evidence gathering → disposition, checks, and implementation review before regenerating.
-6. After candidate QA, launch one fresh read-only subagent that did not implement, perform final implementation review, or author the report. Give frozen scope/evidence, the candidate, and `create-changes-report` `references/artifact-review.md`. No edits or recursive delegation. Require candidate `Clear` before completion. Keep report-review closure in the tracker/final handoff, never in the reviewed HTML.
-   - Report-only → regenerate, re-QA, re-review with a fresh reviewer.
-   - Underlying implementation → reopen affected rows, checks, final implementation review, scope freeze, report generation, and candidate review.
-   - Two failed rounds / recurrence / no progress → existing user-escalation rule.
-   - No safe subagent → ask if the user accepts a disclosed parent fallback; without approval remain `Partial`/`Blocked`. Never claim independence for fallback review.
-7. Final cleanup — worktrees, branches, processes, runtime state, including anything created by a report-triggered fix cycle. Make the final changes-report path the primary handoff. If the skill is unavailable, record that and continue with the concise report below.
-8. Report truthfully.
-
-`Complete` only when all rows are `Verified` or approved `Descoped`, validation passed, final implementation review is `Clear`, the changes-report candidate is `Clear` when a report is produced, and nothing material remains open. Else `Partial` or `Blocked`.
-
-## Report
-
-- changes-report path, or why no report was created
-- plan/tracker paths · status · remaining IDs
-- what was delegated vs parent-owned (and why)
-- checks run / skipped
-- implementation-review and candidate-review outcomes + dispositions
-- decisions, deviations
-- worktrees created/integrated/removed · retained resources + why
+1. Reread the full plan and relevant ADRs; reconcile every requirement and remove unjustified scope/complexity.
+2. Complete final checks and plan-backed implementation review; use `decomplex` Audit when proportionate. Challenge completion against implementation and validation evidence, not task labels alone.
+3. Clean up workflow-owned worktrees, branches, processes, and runtime state; document retained resources and reasons.
+4. Mark `Complete` only when every task is `Verified` or approved `Descoped`, validation passed, final review is `Clear`, and nothing material remains open. Otherwise use `Partial` or `Blocked`.
+5. Deliver the work-document path, related ADRs/reviews, status and remaining IDs, changes, checks run/skipped, review dispositions, delegation limits, and retained resources. HTML reports are optional requested deliverables, not a completion gate.

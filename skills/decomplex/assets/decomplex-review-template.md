@@ -12,7 +12,7 @@
 | Target | |
 | Authority / required behavior | |
 | Scope | |
-| Report | `.reviews/<slug>-decomplex.md` |
+| Report | `adrs/work/<change>-decomplex.md` or explicit override/chat-only |
 
 ## Coverage
 

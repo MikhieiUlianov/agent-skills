@@ -6,7 +6,7 @@ Complete before final delivery and after material revisions. Evidence requiredâ€
 
 - [ ] Outcome, problem, in-scope behavior, material non-goals, approach are clear and unambiguous
 - [ ] No shaky assumptions: material ambiguity was asked of the user or marked as an open gate / Blocked
-- [ ] Every key local planning file is in the key-files table with path, why, and plan impact
+- [ ] Relevant accepted ADRs and key planning files are linked with their impact; material authority conflicts resolved or gated
 - [ ] Implementation starting points included without exhaustive file inventories
 - [ ] External claims use inspected, authoritative, version-matched sources
 - [ ] Material findings map to a decision, task, check, non-goal, or open gate
@@ -29,6 +29,7 @@ Complete before final delivery and after material revisions. Evidence requiredâ€
 - [ ] Every finding/rec dispositioned (`Accept`/`Validate`/`Reject`/`Ask user`/`Block`); nothing auto-applied
 - [ ] Complexity-increasing accepts got triage or built-in gate; doubt escalated to user
 - [ ] Focused re-review until all commissioned reviewers `Clear` (or user escalation after stall)
-- [ ] Review/provenance ledgers kept out of the plan unless they create implementation work
-- [ ] Artifact saved under `.plans/` when writes permit; else no-write reason stated
+- [ ] Full review findings kept in separate reports; work document links concise dispositions/closure
+- [ ] Existing work document reused, or saved as `adrs/work/<change>.md` unless explicitly overridden/no-write; task IDs and useful evidence preserved
+- [ ] Significant new decisions have separate ADRs; acceptance has authorization evidence and is distinct from implementation status
 - [ ] Delivery reports path, decisions/gates, fallbacks, review closure, risks

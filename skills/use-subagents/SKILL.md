@@ -29,7 +29,7 @@ Harness-agnostic **how to delegate**: split work, assign, isolate, verify, clean
 
 When a safe launcher exists, **delegate**. “Small/easy” is not a reason to keep work in parent.
 
-**Parent keeps** (strong reason only): framing/decomposition/synthesis · plan/tracker ownership · integrate/dispositions/acceptance · user comms · workspace + runtime cleanup · atomic no-judgment steps · explicit user prohibition
+**Parent keeps** (strong reason only): framing/decomposition/synthesis · shared work document + ADR status · integrate/dispositions/acceptance · user comms · workspace + runtime cleanup · atomic no-judgment steps · explicit user prohibition
 
 If you skip delegation, record why.
 
@@ -68,7 +68,7 @@ Each child gets one bounded job:
 - **Mode** — reader or writer
 - **Context** — exact cwd/workspace + baseline, files, facts, open questions
 - **Scope** — owned areas, requirements, non-goals, join output
-- **Permissions** — least privilege; no secrets/prod/destructive acts unless explicit; no edits to parent plans/trackers
+- **Permissions** — least privilege; no secrets/prod/destructive acts unless explicit; no edits to the shared work document or ADR status; reviewers never edit their targets
 - **VCS** — no child worktree/branch/commit/integrate/cleanup; read-only VCS only if authorized
 - **Validation** — required checks; report exact results + skips
 - **Stop** — completion condition, timeout; **no recursive delegation**

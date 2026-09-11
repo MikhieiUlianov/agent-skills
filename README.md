@@ -11,6 +11,7 @@
 - `create-report` — create standalone HTML decision, assessment, research, and status reports.
 - `create-skill` — create, rewrite, and review concise, actionable Agent Skills.
 - `create-slides` — build, verify and export templated HTML slide decks from five looks (PDF + MP4 at 1080p/2K/4K).
+- `create-wiki` — create and update reusable, source-backed technology knowledge bases.
 - `generate-image` — generate AI images through fal.ai HTTP queue workflows (Bun CLI; default `openai/gpt-image-2`).
 - `implement-plan` — execute existing Markdown implementation plans with delegation-first tracking, verification, and a final changes report.
 - `use-worktrees` — create, sync, merge, and clean up isolated Git worktrees safely.
@@ -35,6 +36,7 @@ npx skills add maxedapps/agent-skills@awesome-tests
 npx skills add maxedapps/agent-skills@code-review
 npx skills add maxedapps/agent-skills@create-changes-report
 npx skills add maxedapps/agent-skills@create-report
+npx skills add maxedapps/agent-skills@create-wiki
 npx skills add maxedapps/agent-skills@use-mcp
 npx skills add maxedapps/agent-skills@use-worktrees
 npx skills add maxedapps/agent-skills@explain
@@ -48,13 +50,14 @@ npx skills add maxedapps/agent-skills --skill awesome-tests
 npx skills add maxedapps/agent-skills --skill code-review
 npx skills add maxedapps/agent-skills --skill create-changes-report
 npx skills add maxedapps/agent-skills --skill create-report
+npx skills add maxedapps/agent-skills --skill create-wiki
 npx skills add maxedapps/agent-skills --skill use-mcp
 npx skills add maxedapps/agent-skills --skill use-worktrees
 npx skills add maxedapps/agent-skills --skill explain
 npx skills add maxedapps/agent-skills --skill vps-setup-hardening
 ```
 
-Install all seventeen skills explicitly:
+Install all eighteen skills explicitly:
 
 ```sh
 npx skills add maxedapps/agent-skills \
@@ -67,6 +70,7 @@ npx skills add maxedapps/agent-skills \
   --skill create-plan \
   --skill create-skill \
   --skill create-slides \
+  --skill create-wiki \
   --skill generate-image \
   --skill implement-plan \
   --skill use-worktrees \
@@ -97,9 +101,9 @@ Pi and Claude Code honor `disable-model-invocation: true`; Codex honors the bund
 ## Runtime and related skills
 
 - **`awesome-tests` works standalone and supports soft co-activation.** Use it directly for scoped test planning, authoring, repair, or review. It can co-activate with `create-plan` when a behavior-changing plan must specify tests or validation, and with `code-review` when changes materially affect tests or validation. The owning workflow retains artifact, finding, severity, matrix, report, and verdict authority. This is routing behavior, not a hard runtime dependency; all three skills remain independently useful.
-- **`decomplex` is a soft integration.** It can provide focused advisory reports to `code-review`, `create-plan`, and `implement-plan` when installed and proportionate. It requires write access for one distinct `.reviews/<descriptive-slug>-decomplex.md` report but never edits reviewed targets. Each owning workflow retains its concise built-in gate and records an honest fallback when the skill or report write is unavailable.
+- **`decomplex` is a soft integration.** It can provide focused advisory reports to `code-review`, `create-plan`, and `implement-plan` when installed and proportionate. Decision-related reviews default to `adrs/work/<change>-decomplex.md`, while explicit no-write requests return findings in chat; it never edits reviewed targets. Each owning workflow retains its concise built-in gate and records an honest fallback when the skill or report write is unavailable.
 - **`create-report` is for explicit standalone HTML reports** when no domain-specific workflow owns the task. It is not an automatic completion gate.
-- **`create-changes-report` is the repository-change completion artifact.** It runs after code, tests, configuration, schemas, or infrastructure changed and produces a verified standalone HTML review handoff with expandable critical-code evidence and complete paths. `implement-plan` explicitly invokes it after final checks when available, then independently reviews the candidate report before completion, and records the fallback when it is not installed.
+- **`create-changes-report` is an optional repository-change handoff.** It produces a verified standalone HTML report with expandable critical-code evidence and complete paths when explicitly requested or otherwise selected; `implement-plan` does not require it for completion.
 - **`use-worktrees` owns direct worktree operations.** For delegated work, apply it together with `use-subagents`; the parent agent remains responsible for worktree creation, integration, and cleanup.
 - **`use-subagents` is portable policy** (delegate-by-default, roles/assignment contract, worktrees/Git/cleanup) for any harness’s built-in tools, plugins, or CLIs. It does **not** depend on Pi.
 - **`use-pi-subagents` is a Pi launcher only** — use it with `use-subagents` when native `subagent_*` tools are inactive. Never drive competing launchers for the same lane. Parent owns worktrees, Git, and workspace cleanup; Pi `clean` retires run state only. No unaccounted workflow-owned resources.
@@ -117,7 +121,7 @@ Plans, writes, improves, and reviews behavior-focused automated tests and test s
 
 ### `code-review`
 
-Evidence-bound generic and plan-backed reviews. Delegates read-only lanes by default; admits only material reachable findings; parent consolidates scores/verdicts. Supports focused closure rounds without reopening broad scope.
+Evidence-bound generic and plan-backed reviews. Delegates read-only lanes by default; admits only material reachable findings; parent consolidates scores/verdicts. Relevant accepted ADRs constrain implementation, and decision-related reports default to `adrs/work/`. Supports focused closure rounds without reopening broad scope.
 
 ### `create-changes-report`
 
@@ -125,7 +129,7 @@ Creates a self-contained interactive HTML report after repository changes. The r
 
 ### `decomplex`
 
-Reviews proposed or existing source, plans, architecture, tests, configuration, dependencies, and review recommendations for evidenced unnecessary complexity. It supports Prevention, Audit, and Finding triage modes; writes one advisory `.reviews/` report; and never edits reviewed targets.
+Reviews proposed or existing source, plans, architecture, tests, configuration, dependencies, and review recommendations for evidenced unnecessary complexity. It supports Prevention, Audit, and Finding triage modes; writes one advisory `adrs/work/` report by default or returns chat-only findings when requested; and never edits reviewed targets.
 
 ### `explain`
 
@@ -133,7 +137,7 @@ Manual-only. Produces concise, context-grounded Markdown plus polished standalon
 
 ### `create-plan`
 
-Research → smallest plan → review → deliver. Delegates research/review by default; asks the user instead of shaky assumptions; writes a lean `.plans/` handoff with bullet task changes and exact verify steps.
+Research → smallest plan → review → deliver. Delegates research/review by default; asks the user instead of shaky assumptions; maintains one `adrs/work/<change>.md` document for research, tasks, evidence, review closure, and handoff, with separate ADRs only for significant decisions.
 
 ### `create-report`
 
@@ -147,13 +151,17 @@ Creates, rewrites, reviews, and evidence-backed improves Agent Skills with liter
 
 Creates and materially redesigns polished, dependency-free HTML slide decks (vanilla HTML/CSS/JS) from five templates — `dark-marker`, `light-editorial`, `midnight-tech`, `bold-keynote`, `minimal-mono` — that share one archetype vocabulary, five named reveal presets, a cross-slide title morph, and runtime **plus composition** QA. Art-direction intake asks for the look, delivery mode, reveal model and density. Decks open from a local `index.html` with no server, build step, or network access; PDF and MP4 export (1080p/2K/4K, reveals optionally timed to a caption track) need Node, Chrome and ffmpeg.
 
+### `create-wiki`
+
+Creates and updates reusable technology knowledge bases under `wiki/<topic-name>/`. It researches authoritative, version-matched sources and writes focused files covering mental models, workflows, examples, pitfalls, diagnostics, and trade-offs. Wiki content remains portable and excludes project documentation, architecture decisions, plans, and index/README files.
+
 ### `generate-image`
 
 Generates AI images through fal.ai via a small Bun HTTP/queue CLI. Defaults to `openai/gpt-image-2`, uses `FAL_KEY`, and downloads result files locally for inspection.
 
 ### `implement-plan`
 
-Maps a plan to tracker tasks/subtasks, then runs a delegated loop per item: analyze → implement → check → review → fix until clear → cleanup → next. Subagents by default (built-in, plugins, or skills) under `use-subagents` policy. Parent owns tracker, integration, dispositions, acceptance, and mandatory worktree/runtime cleanup. After final checks, changed repositories receive a `create-changes-report` HTML review handoff when that skill is available, then an independent candidate-report review before completion.
+Resumes the shared `adrs/work/<change>.md` document, reconciles its tasks and accepted ADRs, then runs a delegated loop per item: analyze → implement → check → review → disposition → update → cleanup. The parent owns shared work, ADR status, integration, acceptance, and cleanup. Completion requires verified or approved-descoped tasks, final validation, a clear plan-backed review, and no material open work; HTML reports are optional.
 
 ### `use-worktrees`
 
@@ -173,7 +181,7 @@ Uses mcporter as a narrow adapter for configured or ad-hoc MCP servers. It disco
 
 ### `web-research`
 
-Researches current web and external technical information with available search, retrieval, repository, document, media, and browser capabilities. It favors official, version-matched evidence; small direct lookups can remain artifact-free, while substantive or conflicting research retains progress memory.
+Researches current web and external technical information with available search, retrieval, repository, document, media, and browser capabilities. It favors official, version-matched evidence; small direct lookups can remain artifact-free, while substantive or conflicting research is retained in the active `adrs/work/` document and reusable technology knowledge belongs in the wiki.
 
 ### `vps-setup-hardening`
 

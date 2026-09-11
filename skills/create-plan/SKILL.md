@@ -21,11 +21,10 @@ metadata:
 ## Hard rules
 
 - **Plan only** — never implement.
-- Allowed writes: `.plans/<kebab-name>.md`, and `.reviews/*-decomplex.md` when needed.
+- Before framing, read [ADR conventions](references/adr-conventions.md): shared paths, decision lifecycle, and authority. Write only the work document, relevant ADRs, and supporting reviews.
 - Evidence-backed. Smallest design. No speculative scope.
 - **Ask user** on material ambiguity (scope/behavior/architecture/migration/risk/complexity). No shaky assumptions.
-- **Delegate by default** for research and review when safe. “Small/easy” ≠ skip subagents.
-- Leverage subagents — built-in, extensions/plugins, or skills. Follow `use-subagents` policy; use native subagents, extensions / plugins, or other skills
+- **Delegate by default** for research/review when safe; follow `use-subagents`. “Small/easy” alone does not justify skipping.
 - Main agent owns synthesis, plan writes, dispositions, delivery.
 - Child/reviewer output = evidence, never acceptance. Findings never auto-enter the plan.
 - Prefer simpler fixes. Stuck review (2 failed rounds / recurrence / no progress) → ask user.
@@ -48,18 +47,18 @@ metadata:
 
 ## Sequence
 
-1. **Frame** — request, repo instructions, existing plans → outcome, scope, non-goals, risks, validation. Don’t deep-explore in parent when a research lane can.
+1. **Frame** — read ADR conventions, relevant accepted ADRs, repository instructions, and existing work → outcome, scope, non-goals, risks, validation.
 2. **Load template.**
 3. **Research** — enumerate questions; **delegate by default** (one question/scope/stop per lane). Inspect relevant existing tests, framework/configuration, and repository commands. External only if decision-relevant. Verify critical claims.
 4. **Resolve gates** — still ambiguous? **ask user** before drafting as fact.
 5. **Synthesize** — smallest approach; map findings → decisions/tasks/checks/non-goals/gates; drop fluff.
-6. **Draft** — adapt template; flat tasks default; phases only for real boundaries; no review ledgers in the handoff.
+6. **Draft** — adapt the template within `adrs/work/<change>.md`; preserve existing research and task IDs. Link applicable ADRs; draft significant new choices separately. Flat tasks default; phases only for real boundaries.
 7. **Complexity** — structural draft → `decomplex` Prevention if available, else built-in gate. Complexity-increasing accept → triage; doubt → ask user.
 8. **Review** — consequential plans: delegate fresh independent reviewers for adversarial review → disposition (`Accept`/`Validate`/`Reject`/`Ask user`/`Block`) → revise → re-review until `Clear`. Small/unavailable: parent checklist + independence limit.
    - In independent or parent review, challenge material assumptions, feasibility, and sequencing with realistic counterexamples.
    - Ask: if implemented exactly and all named checks passed, could the required outcome still fail?
    - Ground concerns in inspected evidence and realistic consequences; consider safeguards and contrary evidence. Recommend the smallest in-scope correction. `Clear` with no material findings is valid.
-9. **Checklist → deliver** — save under `.plans/` (or chat + no-write reason). Report path, gates, decisions, fallbacks, risks.
+9. **Checklist → deliver** — update the shared work document (or chat when no-write). Report path, ADRs, gates, review closure, fallbacks, and risks.
 
 ## Stop
 

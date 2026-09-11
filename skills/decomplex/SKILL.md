@@ -12,7 +12,7 @@ description: >-
 license: MIT
 compatibility: >-
   Requires read access to reviewed targets and project write access for one
-  .reviews/ report; has no hard runtime dependency and never writes targets.
+  adrs/work/ report; has no hard runtime dependency and never writes targets.
 metadata:
   short-description: Evidence-gated complexity prevention, audit, and triage
 ---
@@ -32,12 +32,10 @@ metadata:
   - scope
 - Ask only when ambiguity changes those.
 - Targets immutable.
-- **Only** write: one `.reviews/<slug>-decomplex.md`.
+- Before fixing the contract, read [ADR conventions](../create-plan/references/adr-conventions.md) for paths and decision authority.
+- **Only** write: one `adrs/work/<change>-decomplex.md` unless an explicit output path overrides it.
 - Never edit reviewed artifacts (even if asked to fix).
-- Direct invoke and report not writable → **stop**.
-  - no chat-only substitute
-  - embedders may use their own fallback
-  - must not claim `decomplex` ran
+- Honor explicit no-write/chat-only requests with findings in chat. If a requested file cannot be written, disclose the limit; never claim it was saved.
 - Complexity trade-offs only.
 - Route defects/security/perf/plan-compliance to the owning workflow (e.g. `code-review`).
 - Simplicity ≠ fewer lines/helpers/deps.
@@ -94,6 +92,7 @@ Prefer:
 ## Sequence
 
 1. **Contract**
+   - read ADR conventions and relevant accepted decisions
    - mode
    - target
    - authority
@@ -115,11 +114,11 @@ Prefer:
    - triage dispositions: `Act` | `Validate` | `Ask user` | `No action`
 5. **Before write**
    - read [`assets/decomplex-review-template.md`](assets/decomplex-review-template.md) fully
-   - write exactly one report
+   - write exactly one report, or return it in chat under no-write constraints
    - strip template guidance/empty sections
    - keep inspected/skipped coverage + limitations
 6. **Verify**
-   - report exists
+   - requested report exists, or chat-only delivery/limit is explicit
    - admitted items pass gate
    - all triage IDs accounted
    - no target file changed

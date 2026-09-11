@@ -13,69 +13,34 @@ metadata:
 
 # Web Research
 
-## Instruction priority
+## Rules
 
-Follow explicit user constraints and higher-priority instructions. If the user narrows scope, forbids external tools, requests chat-only output, or changes this workflow, adapt and briefly note meaningful deviations.
+- Honor user constraints, including no-write/chat-only requests. Discover available retrieval capabilities; do not assume tool names.
+- Prefer primary sources and read answer-critical content. Search snippets and generated summaries are discovery aids, not sufficient evidence.
+- For dependency claims, establish installed/targeted versions and runtime/integration boundaries. Prefer version-matched source over conflicting live documentation.
+- For signatures, hashing, serialization, canonicalization, authentication, or wire protocols, require an independent official implementation, test vector, or interoperability check; self-consistent round trips are insufficient.
+- Cite URLs, separate observation from inference, and state uncertainty. Never store secrets, credentials, private sessions, or sensitive source content.
 
-Use the best currently available search, content-retrieval, repository, document, media, and browser capabilities. Tool names and schemas differ between runtimes: inspect the available tools instead of assuming a particular function name.
+## Resources
 
-## Core rules
+Read before the corresponding work:
 
-- For substantive multi-source, conflicting, resumable, implementation-critical, or high-risk research, create or reuse `.progress/<research-slug>.md` early for questions, context, search angles, sources, findings, conflicts, rejected evidence, open questions, and synthesis decisions.
-- Small direct lookups or source reads do not require a progress artifact. Preserve answer-critical sources and findings in the response.
-- When progress notes exist, reread them before final responses, handoffs, compaction summaries, or user-requested summaries.
-- Prefer primary sources: official docs, source repositories, release notes, changelogs, standards, vendor announcements, and first-party data.
-- Read answer-critical source content. Search snippets and generated summaries are discovery aids, not sufficient evidence for behavior-sensitive claims.
-- Continue with targeted follow-up when evidence is incomplete, ambiguous, outdated, conflicting, version-mismatched, or available only from weak secondary sources.
-- For code/dependency research, identify the exact installed or targeted version from project files before judging behavior. Record runtime, adapter, framework, and integration boundaries that could affect the answer.
-- For signatures, hashing, serialization, canonicalization, authentication, or wire protocols, require an independent official implementation, test vector, or interoperability check; a self-consistent round trip is not enough.
-- Stop when material questions are supported, remaining gaps are explicitly non-material, or further useful evidence is unlikely.
-- Cite source URLs clearly and state uncertainty instead of guessing.
-- Never store secrets, credentials, private session data, or sensitive source content in research notes.
-
-## Resource routing
-
-| Need | Guidance |
+| Work | Resource |
 |---|---|
-| Discover or compare sources | Use an available web search capability; read `references/web-search.md` before complex, filtered, multi-angle, or recency-sensitive discovery. |
-| Inspect URLs, docs, repositories, or PDFs | Use an available content/repository/document retrieval capability; read `references/fetch-content.md` before multi-source, repository, PDF, or truncated-content work. |
-| Analyze video/audio or visual moments | Use an available media-capable retrieval/analysis tool and pass the user's exact question; read `references/media.md` first. |
-| Interact with login, forms, pagination, dynamic UI, or authenticated state | Use an available browser automation capability rather than static search/retrieval alone. |
-| Inspect local documents | Use an available local document parser/search/screenshot capability, choosing text extraction or visual inspection according to the question. |
+| Substantial research notes or decision synthesis | [ADR conventions](../create-plan/references/adr-conventions.md): shared document paths and decision authority |
+| Complex, filtered, multi-angle, or current discovery | [Web search](references/web-search.md) |
+| Multiple sources, repositories, PDFs, or truncated content | [Content retrieval](references/fetch-content.md) |
+| Video/audio or visual moments | [Media](references/media.md) |
+
+Use browser automation for logins, forms, or dynamic interaction; local parsers/screenshots for local documents.
 
 ## Workflow
 
-1. **Classify the task and create proportional research memory**
-   - Classify it as a small direct lookup/source read or as substantive multi-source, conflicting, resumable, implementation-critical, or high-risk research.
-   - For substantive research, create or reuse `.progress/<research-slug>.md` and record the question, intended output, constraints, evidence bar, known context, and search angles.
-   - For a small lookup, work directly and retain answer-critical sources and findings for the response.
+1. **Frame.** Small direct lookups need no artifact. For substantial, conflicting, resumable, implementation-critical, or high-risk research, read ADR conventions and reuse the active work document or create `adrs/work/<research-slug>.md`. Record question, scope, constraints, known context, and search angles. No-write → retain evidence in the response.
+2. **Establish context.** Inspect manifests, lockfiles, configuration, or exact source when applicable. Identify the behavior, compatibility, failure, and integration questions that affect the answer.
+3. **Discover.** Inspect user-supplied sources first; otherwise use two to four distinct angles, such as official docs, source/release history, and corroborating implementations. Retrieve selected answer-critical sources.
+4. **Inspect.** Read actual docs/source/tests or media. Resolve truncation through full content or an alternate retrieval path. In substantial research, retain useful findings, citations, version/date scope, material conflicts, rejected evidence, open questions, and next action in the same work document.
+5. **Resolve.** Assess authority, directness, version match, and failure behavior. Follow up narrowly on material gaps; stop when supported, remaining gaps are non-material, or further useful evidence is unlikely.
+6. **Synthesize.** Reread existing work notes before final responses, handoffs, or compaction. State findings, implications, source conflicts, and limits. Link decision-relevant evidence to the owning ADR; draft only actual significant choices and never treat research as acceptance. Reusable technology knowledge belongs in the wiki.
 
-2. **Establish exact technical context when applicable**
-   - Identify dependency/library/framework names and versions from manifests, lockfiles, imports, config, or installed metadata.
-   - Record relevant runtime, platform, adapter, environment, and compatibility constraints.
-   - List implementation-critical questions: normal behavior, edge cases, error semantics, migration constraints, and integration boundaries.
-
-3. **Discover sources deliberately**
-   - If the user supplied a public source, inspect it directly before searching broadly.
-   - Otherwise search from two to four meaningfully different angles: official documentation, source/release history, implementation examples, and independent corroboration.
-   - Prefer focused search and selected retrieval over indiscriminate background fetching.
-
-4. **Retrieve and inspect primary evidence**
-   - Read the actual official docs, source files, release notes, standards, repository examples, PDFs, or media needed for the answer.
-   - For repositories, inspect implementation and tests when behavior matters; README-level claims alone may be insufficient.
-   - Retrieve full stored content or use another retrieval path when results are truncated.
-   - For substantive research, record useful, weak, stale, conflicting, and rejected sources in progress memory.
-
-5. **Evaluate sufficiency and follow up**
-   - Check authority, date/version match, directness, agreement, edge cases, failure behavior, and implementation implications.
-   - Resolve conflicts by preferring version-matched official docs and source, then release notes/changelogs, first-party examples, and finally secondary analysis.
-   - Continue only with targeted follow-up; avoid redundant research once strong sources converge.
-
-6. **Synthesize carefully**
-   - State the supported answer, version constraints, implementation implications, and meaningful uncertainty.
-   - Separate observed facts from inference and explain material conflicts.
-   - Do not expose tool mechanics unless they matter to the user.
-
-## Late results
-
-If delayed research output arrives after an answer, re-engage only when it materially changes the conclusion, reveals an important correction, or the user asks about it.
+Late results warrant a follow-up only if they materially change the conclusion or the user asks.

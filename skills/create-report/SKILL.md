@@ -6,10 +6,9 @@ description: >-
   asked to create, build, or package a polished standalone HTML report,
   decision brief, cited research report, risk-assessment report,
   project-status report, or executive HTML report and no domain-specific
-  workflow owns the task. Do not use as an automatic completion gate; for
-  completed repository-change handoffs use `create-changes-report`; for
-  defect reviews use `code-review`; when `explain` is explicitly invoked use
-  `explain`; for slide decks use `create-slides`; `create-plan`, `decomplex`,
+  workflow owns the task. Do not use as an automatic completion gate or for
+  completed repository-change handoffs; for defect reviews use `code-review`;
+  for slide decks use `create-slides`; `create-plan`, `decomplex`,
   and `implement-plan` keep their domains; live KPI dashboards or apps are
   implementation, not this skill.
 license: MIT
@@ -28,7 +27,7 @@ This skill is not a completion gate. Produce a report only for an explicit stand
 
 ## Critical rules
 
-- Default to one offline `reports/<descriptive-slug>.html`. Do not overwrite an existing path without explicit approval.
+- Before choosing a decision-related report path, read [ADR conventions](../create-plan/references/adr-conventions.md); default to `adrs/work/<change>-report.html`. Other standalone reports default to `reports/<descriptive-slug>.html`. Honor user paths; do not overwrite without authorization.
 - Keep the executive layer to about five minutes: answer or outcome, scope, key evidence, implications, and next action.
 - Label material ambiguity `Observed`, `Source-reported`, `Inference`, or `Unknown`. Cite relocatable sources. Never invent metrics, confidence, ownership, dates, status, rationale, or citations.
 - Findings state evidence, consequence, and next action. Recommendations state basis, expected effect, trade-off, assumptions, and prerequisites. Use `Unassigned`, `TBD`, or `Unknown` rather than filling gaps.

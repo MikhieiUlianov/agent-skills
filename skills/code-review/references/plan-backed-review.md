@@ -21,7 +21,7 @@ Read every authority source in full (continue truncated reads). Never infer from
 2. Follow user-stated precedence among plans/designs/acceptance/decisions.
 3. Else co-authoritative named sources; report conflicts.
 4. Decision/deviation/descope changes baseline only with approval source, scope, rationale, consequence.
-5. Trackers/progress notes = claims/evidence unless explicitly designated authority.
+5. Research, task statuses, and review closure in the shared work document are claims/evidence, not authority. Relevant accepted ADRs constrain implementation; proposed/superseded ADRs are not current acceptance criteria.
 
 Unresolved material conflict → ask if needed; else `baseline quality/conflict` finding, affected rows `Unverifiable`, lower confidence.
 

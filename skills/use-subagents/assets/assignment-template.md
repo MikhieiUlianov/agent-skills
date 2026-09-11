@@ -14,7 +14,7 @@ Non-goals and prohibited areas: <exclusions>
 Dependencies / join point: <inputs from other lanes; where result feeds>
 Permissions: <tools/paths allowed>
 VCS: no worktree/branch/commit/integrate/cleanup; read-only VCS only if explicitly authorized
-Do not edit parent-owned plans, trackers, manifests, or integration state.
+Do not edit the parent-owned work document, ADR status, manifests, or integration state. Reviewers never edit their targets.
 Never delegate, spawn, or coordinate another agent. No recursive delegation.
 Validation: <checks>. Report exact results and justified skips.
 Stop when: <completion condition>. Timeout: <bound>.

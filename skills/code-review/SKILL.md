@@ -9,7 +9,7 @@ description: >-
 license: MIT
 compatibility: >-
   Requires read access to reviewed targets. Standalone report writes need
-  project write access under .reviews/. Delegation requires a safely available
+  project write access under adrs/work/. Delegation requires a safely available
   subagent capability.
 metadata:
   short-description: Adaptable generic and plan-backed implementation review
@@ -25,8 +25,7 @@ metadata:
 - **“No material findings” is valid.**
 - No source edits unless asked. Don’t clobber owner git/worktree state.
 - Main agent assigns final findings/scores/verdicts. Child handoffs = evidence.
-- **Delegate by default** into bounded read-only lanes when safe. “Small/easy” ≠ skip.
-- Leverage subagents — built-in, extensions/plugins, or skills. Follow `use-subagents` policy and use the host’s selected safe launcher.
+- **Delegate by default** into bounded read-only lanes under `use-subagents` when safe. “Small/easy” alone does not justify skipping.
 
 ### Admit a finding only if
 
@@ -42,20 +41,21 @@ Hypotheses guide investigation, not findings. Omit unsupported speculation, nits
 
 | When | Read |
 |---|---|
+| Before resolving authority/output | [ADR conventions](../create-plan/references/adr-conventions.md): shared paths, lifecycle, and relevant accepted decisions |
 | Broad or deep dimension review, or explicit test/validation review | [`references/review-dimensions.md`](references/review-dimensions.md) first |
 | Vs plan/tracker/design/acceptance | [`references/plan-backed-review.md`](references/plan-backed-review.md) first |
 | Standalone report | [`assets/review-report-template.md`](assets/review-report-template.md) before write |
 
 ## Flow
 
-1. Fix scope/authority/output — ask if needed.
+1. Read ADR conventions; fix scope/authority/output and identify relevant accepted ADRs. Ask only on material unresolved ambiguity.
 2. Load conditional resources.
 3. Inspect targets, callers, tests, config, diffs. Trace material claims through callers, state transitions, and boundaries.
 4. **Delegate** review lanes by default (correctness, security, tests, plan-matrix, …).
 5. Challenge candidate failures against existing safeguards and contrary evidence. Use source proof or safe targeted checks/repros; preserve owner state. Note skips + confidence limits.
 6. Admit → score → cap findings.
 7. Optional `decomplex` only if complexity-focused and report writable; else built-in simplicity. Don’t merge contracts.
-8. Write `.reviews/<slug>.md` (unless chat-only/no-write) or return handoff.
+8. Write `adrs/work/<change>-review.md` (unless overridden/chat-only/no-write) or return handoff. Keep full findings separate from the work document; parent owns dispositions/closure.
 9. Cleanup any workflow runtime/process state.
 
 ## Scores and caps
